@@ -451,6 +451,9 @@ multiple DISPLAY-FN invokations."
         ((eq avy-all-windows t)
          (window-list))
 
+        ((eq avy-all-windows 'not-mini-buffer)
+         (window-list nil 1 nil))
+
         ((null avy-all-windows)
          (list (selected-window)))
 
