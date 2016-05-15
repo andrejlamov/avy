@@ -466,7 +466,7 @@ multiple DISPLAY-FN invokations."
           (const :tag "Current window" nil)
           (const :tag "All windows on the current frame" t)
           (const :tag "All windows on all frames" all-frames)
-          (const :tag "All windows on all frames, but not the minibuffer" not-mini-buffer)))
+          (const :tag "All windows on all frames, but not the mini-buffer" not-mini-buffer)))
 
 (defmacro avy-dowindows (flip &rest body)
   "Depending on FLIP and `avy-all-windows' run BODY in each or selected window."
@@ -534,7 +534,7 @@ Set `avy-style' according to COMMMAND as well."
   (message "Killed: %s" (current-kill 0)))
 
 (defun avy-action-save-to-kill-ring (pt)
-  "Kill sexp at PT and move there."
+  "Save sexp at PT and go back."
   (goto-char pt)
   (forward-sexp)
   (kill-ring-save pt (point))
