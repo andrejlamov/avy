@@ -126,7 +126,8 @@ If the commands isn't on the list, `avy-style' is used."
     (?X . avy-action-kill-stay)
     (?m . avy-action-mark)
     (?n . avy-action-copy)
-    (?i . avy-action-ispell))
+    (?i . avy-action-ispell)
+    (?c . avy-action-save-to-kill-ring))
   "List of actions for `avy-handler-default'.
 
 Each item is (KEY . ACTION).  When KEY not on `avy-keys' is
@@ -139,7 +140,8 @@ pressed during the dispatch, ACTION is set to replace the default
                  (const :tag "Mark" avy-action-mark)
                  (const :tag "Copy" avy-action-copy)
                  (const :tag "Kill and move point" avy-action-kill-move)
-                 (const :tag "Kill" avy-action-kill-stay))))
+                 (const :tag "Kill" avy-action-kill-stay)
+                 (const :tag "Save" avy-action-save-to-kill-ring))))
 
 (defcustom avy-background nil
   "When non-nil, a gray background will be added during the selection."
@@ -460,7 +462,8 @@ multiple DISPLAY-FN invokations."
   :type '(choice
           (const :tag "Current window" nil)
           (const :tag "All windows on the current frame" t)
-          (const :tag "All windows on all frames" all-frames)))
+          (const :tag "All windows on all frames" all-frames)
+          (const :tag "All windows on all frames, but not the minibuffer" not-mini-buffer)))
 
 (defmacro avy-dowindows (flip &rest body)
   "Depending on FLIP and `avy-all-windows' run BODY in each or selected window."
@@ -526,6 +529,13 @@ Set `avy-style' according to COMMMAND as well."
    (kill-region pt (point))
    (just-one-space))
   (message "Killed: %s" (current-kill 0)))
+
+(defun avy-action-save-to-kill-ring (pt)
+  "Kill sexp at PT and move there."
+  (goto-char pt)
+  (forward-sexp)
+  (kill-ring-save pt (point))
+  (message "Saved: %s to %s" pt (point)))
 
 (defun avy-action-ispell (pt)
   "Auto correct word at PT."
